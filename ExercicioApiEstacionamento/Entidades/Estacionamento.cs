@@ -40,19 +40,19 @@ namespace ExercicioApiEstacionamento.Entidades
             if (veiculo is null)
                 throw new Exception("Veiculo não encontrado");
 
-            //veiculo.Diaria.AtualizarDiaria(DateTime.Now.AddMinutes(30));
-            veiculo.Diaria.AtualizarDiaria(DateTime.Now);
+            veiculo.Diaria.AtualizarDiaria(DateTime.Now.AddMinutes(30));
+            //veiculo.Diaria.AtualizarDiaria(DateTime.Now);
 
         }
 
-        public void GerarTicket(string placa)
+        public string GerarTicket(string placa)
         {
             var veiculo = _veiculo.SingleOrDefault(c => c.Placa == placa);
 
             if (veiculo is null)
                 throw new Exception("Veiculo não encontrado");
 
-            Console.WriteLine(veiculo.ToString());
+            return veiculo.ToString();
 
         }
 

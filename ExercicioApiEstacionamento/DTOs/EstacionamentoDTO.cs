@@ -6,7 +6,7 @@ namespace ExercicioApiEstacionamento.DTOs
     {
         public string Nome { get; set; }
         public string Documento { get; set; }
-        //public List<VeiculoDTO>? Veiculo { get; set; }
+        
 
         public override void Validar()
         {

@@ -27,7 +27,7 @@ namespace ExercicioApiEstacionamento.Servicos
                 throw new Exception("Diaria não encontrada!");
 
             diaria.AdicionarVeiculo(veiculo);
-            //diaria.CalcularTotal();
+            
             return diaria;
 
         }

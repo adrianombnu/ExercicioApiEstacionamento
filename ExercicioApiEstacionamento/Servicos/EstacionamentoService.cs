@@ -44,7 +44,7 @@ namespace ExercicioApiEstacionamento.Servicos
             return est;
         }
 
-        public Estacionamento FinalizarDiaria(Guid id, string placa)
+        public string FinalizarDiaria(Guid id, string placa)
         {
             var est = _estacionamento.SingleOrDefault(u => u.Id == id);
 
@@ -52,7 +52,7 @@ namespace ExercicioApiEstacionamento.Servicos
                 throw new Exception("Estacionamento não encontrado!");
 
             est.FinalizarDiaria(placa);
-            return est;
+            return est.GerarTicket(placa);
         }
 
     }
