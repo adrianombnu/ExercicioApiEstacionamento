@@ -33,6 +33,7 @@ namespace ExercicioApiEstacionamento
                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                .AddNewtonsoftJson(c => c.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
+            services.Configure<MinhasConfiguracoes>(Configuration.GetSection("Valores"));
             services.AddSingleton<EstacionamentoService>();
             services.AddSingleton<VeiculoService>();
             services.AddSingleton<DiariaService>();
@@ -64,6 +65,19 @@ namespace ExercicioApiEstacionamento
             {
                 endpoints.MapControllers();
             });
+        }
+
+        public class MinhasConfiguracoes
+        {
+            public decimal AbaixoQuinzeMinutosCarro { get; set; }
+            public decimal AcimaQuinzeMinutosCarro { get; set; }
+            public decimal DiariaCarro { get; set; }
+            public decimal DuchaCarro { get; set; }
+            public decimal AbaixoQuinzeMinutosMoto { get; set; }
+            public decimal AcimaQuinzeMinutosMoto { get; set; }
+            public decimal DiariaMoto { get; set; }
+            public int TempoLimite { get; set; }
+           
         }
                    
     }

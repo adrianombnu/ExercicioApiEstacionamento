@@ -8,9 +8,11 @@ namespace ExercicioApiEstacionamento.Servicos
     public class DiariaService
     {
         private readonly List<Diaria> _diarias;
+        
         public DiariaService()
         {
             _diarias ??= new List<Diaria>();
+            
         }
 
         public Diaria Cadastrar(Diaria diaria)

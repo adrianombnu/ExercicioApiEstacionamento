@@ -4,7 +4,7 @@ namespace ExercicioApiEstacionamento.DTOs
 {
     public class DiariaDTO : Validator
     {
-        public DateTime DataHoraInicio { get; set; }
+        //public DateTime DataHoraInicio { get; set; }
         //public DateTime DataHoraFim { get; set; }
         public VeiculoDTO Veiculo { get; set; }
         public bool DiariaAdquirida { get; set; }

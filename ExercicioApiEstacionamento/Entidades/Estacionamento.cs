@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,27 +28,33 @@ namespace ExercicioApiEstacionamento.Entidades
             if (diaria is null)
                 throw new Exception("Não foi iniciado uma diaria");
 
-            veiculo.IniciarDiaria(new Diaria(DateTime.Now, veiculo, diaria.DiariaAdquirida, diaria.DuchaAdquirida));
+            var carro = _veiculo.SingleOrDefault(c => c.Placa == veiculo.Placa);
+
+            if (carro is not null && carro.Diaria.DiariaFinalizada == false)
+                throw new Exception("Veiculo já está com uma diária em andamento.");
+
+            veiculo.IniciarDiaria(diaria);
 
             _veiculo.Add(veiculo);
 
         }
 
-        public void FinalizarDiaria(string placa)
+        public string FinalizarDiaria(string placa, Startup.MinhasConfiguracoes options)
         {
-            var veiculo = _veiculo.SingleOrDefault(c => c.Placa == placa);
+            var veiculo = _veiculo.SingleOrDefault(c => c.Placa == placa && c.Diaria.DiariaFinalizada == false);
 
             if (veiculo is null)
                 throw new Exception("Veiculo não encontrado");
 
-            veiculo.Diaria.AtualizarDiaria(DateTime.Now.AddMinutes(30));
-            //veiculo.Diaria.AtualizarDiaria(DateTime.Now);
+            veiculo.Diaria.AtualizarDiaria(DateTime.Now.AddMinutes(30), options);
+            return GerarTicket(veiculo.Id);
+            
 
         }
 
-        public string GerarTicket(string placa)
+        public string GerarTicket(Guid id)
         {
-            var veiculo = _veiculo.SingleOrDefault(c => c.Placa == placa);
+            var veiculo = _veiculo.SingleOrDefault(c => c.Id == id);
 
             if (veiculo is null)
                 throw new Exception("Veiculo não encontrado");

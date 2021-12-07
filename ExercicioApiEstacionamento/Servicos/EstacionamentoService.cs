@@ -1,4 +1,5 @@
 ﻿using ExercicioApiEstacionamento.Entidades;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,21 @@ namespace ExercicioApiEstacionamento.Servicos
     public class EstacionamentoService
     {
         private readonly List<Estacionamento> _estacionamento;
+        private readonly Startup.MinhasConfiguracoes _settigns;
 
-        public EstacionamentoService()
+        public EstacionamentoService(IOptions<Startup.MinhasConfiguracoes> options)
         {
             _estacionamento ??= new List<Estacionamento>();
+            _settigns = options.Value;
         }
 
         public Estacionamento CadastrarEstacionamento(Estacionamento estacionamento)
         {
+            var est = _estacionamento.Where(u => u.Documento == estacionamento.Documento).SingleOrDefault();
+
+            if (est is not null)
+                throw new Exception("Estacionamento já cadastrado!");
+
             _estacionamento.Add(estacionamento);
             return estacionamento;
         }
@@ -51,8 +59,9 @@ namespace ExercicioApiEstacionamento.Servicos
             if (est is null)
                 throw new Exception("Estacionamento não encontrado!");
 
-            est.FinalizarDiaria(placa);
-            return est.GerarTicket(placa);
+            return est.FinalizarDiaria(placa, _settigns);
+            //return est.GerarTicket(placa);
+            //return est;
         }
 
     }

@@ -29,9 +29,17 @@ namespace ExercicioApiEstacionamento.Controllers
             if (!estacionamentoDTO.Valido)
                 return BadRequest("Estacionamento informado inválido!");
 
-            var est = new Estacionamento(nome: estacionamentoDTO.Nome, documento: estacionamentoDTO.Documento);
+            try
+            {
+                var est = new Estacionamento(nome: estacionamentoDTO.Nome, documento: estacionamentoDTO.Documento);
 
-            return Created("", _estacionamentoService.CadastrarEstacionamento(est));
+                return Created("", _estacionamentoService.CadastrarEstacionamento(est));
+
+            }catch (Exception ex)
+            {
+                return BadRequest("Erro ao cadastrar estacionamento: " + ex.Message);
+            }
+
         }
 
         [HttpPost, Route("{id}/veiculo")]
@@ -45,7 +53,7 @@ namespace ExercicioApiEstacionamento.Controllers
             try
             {
                 var veiculo = new Veiculo(veiculoDTO.Placa, veiculoDTO.Modelo, veiculoDTO.Cor, veiculoDTO.TipoVeiculo);
-                var diaria = new Diaria(veiculoDTO.Diaria.DataHoraInicio, veiculo, veiculoDTO.Diaria.DiariaAdquirida, veiculoDTO.Diaria.DuchaAdquirida);
+                var diaria = new Diaria(DateTime.Now, veiculo, veiculoDTO.Diaria.DiariaAdquirida, veiculoDTO.Diaria.DuchaAdquirida);
 
                 veiculo.Diaria = diaria;
 
@@ -65,8 +73,14 @@ namespace ExercicioApiEstacionamento.Controllers
         [HttpPost, Route("{id}/finalizarDiaria/{placa}")]
         public IActionResult FinalizarDiaria(Guid id,string placa)
         {
+            try
+            {
+                return Created("", _estacionamentoService.FinalizarDiaria(id, placa));
 
-            return Created("", _estacionamentoService.FinalizarDiaria(id, placa));
+            }catch (Exception ex)
+            {
+                return BadRequest("Erro ao finalizar diária: " + ex.Message);
+            }
            
         }
 
