@@ -18,16 +18,6 @@ namespace ExercicioApiEstacionamento.Entidades
 
         }
 
-        const decimal AbaixoQuinzeMinutosCarro = 2;
-        const decimal AcimaQuinzeMinutosCarro = 10;
-        const decimal DiariaCarro = 50;
-        const decimal DuchaCarro = 65;
-
-        const decimal AbaixoQuinzeMinutosMoto = 2;
-        const decimal AcimaQuinzeMinutosMoto = 10;
-        const decimal DiariaMoto = 50;
-        const int TempoLimite = 15;
-
         public DateTime DataHoraInicio { get; private set; }
         public DateTime DataHoraFim { get; private set; }
         public DateTime DataPagamento { get; private set; }

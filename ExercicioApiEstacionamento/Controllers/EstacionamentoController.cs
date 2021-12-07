@@ -76,7 +76,7 @@ namespace ExercicioApiEstacionamento.Controllers
         {
             try
             {
-                return Created("", _estacionamentoService.FinalizarDiaria(id, placa));
+                return Ok(_estacionamentoService.FinalizarDiaria(id, placa));
 
             }catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace ExercicioApiEstacionamento.Controllers
                         {
                             var formaPagamento = new Boleto(DateTime.Now, pagamentoDTO.PagamentoBoleto.Valor);
 
-                            return Created("", _diariaService.FinalizarPagamento(idDiaria, formaPagamento));
+                            return Ok(_diariaService.FinalizarPagamento(idDiaria, formaPagamento));
 
                         }
 
@@ -112,7 +112,7 @@ namespace ExercicioApiEstacionamento.Controllers
                                                                   pagamentoDTO.PagamentoCartaoCredito.CodigoCvc,
                                                                   pagamentoDTO.PagamentoCartaoCredito.Valor);
 
-                            return Created("", _diariaService.FinalizarPagamento(idDiaria, formaPagamento));
+                            return Ok(_diariaService.FinalizarPagamento(idDiaria, formaPagamento));
 
                         }
 
@@ -123,7 +123,7 @@ namespace ExercicioApiEstacionamento.Controllers
                                                                   pagamentoDTO.PagamentoCartaoDebito.CodigoCvc,
                                                                   pagamentoDTO.PagamentoCartaoDebito.Valor);
 
-                            return Created("", _diariaService.FinalizarPagamento(idDiaria, formaPagamento));
+                            return Ok(_diariaService.FinalizarPagamento(idDiaria, formaPagamento));
 
                         }
 
@@ -133,7 +133,7 @@ namespace ExercicioApiEstacionamento.Controllers
                             {
                                 var formaPagamento = new Pix(pagamentoDTO.PagamentoPix.ChavePix, pagamentoDTO.PagamentoPix.Valor);
 
-                                return Created("", _diariaService.FinalizarPagamento(idDiaria, formaPagamento));
+                                return Ok(_diariaService.FinalizarPagamento(idDiaria, formaPagamento));
                             }
                             else
                             {
@@ -142,7 +142,7 @@ namespace ExercicioApiEstacionamento.Controllers
                                                              pagamentoDTO.PagamentoPix.NumeroConta,
                                                              pagamentoDTO.PagamentoPix.Valor);
 
-                                return Created("", _diariaService.FinalizarPagamento(idDiaria, formaPagamento));
+                                return Ok(_diariaService.FinalizarPagamento(idDiaria, formaPagamento));
                             }
 
                         }
