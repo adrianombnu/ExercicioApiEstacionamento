@@ -30,11 +30,13 @@ namespace ExercicioApiEstacionamento.Entidades
 
         public DateTime DataHoraInicio { get; private set; }
         public DateTime DataHoraFim { get; private set; }
+        public DateTime DataPagamento { get; private set; }
         public Veiculo Veiculo { get; private set; }
         public bool DiariaAdquirida { get; private set; }
         public bool DuchaAdquirida { get; private set; }
         public decimal ValorDiaria { get; private set; }
         public bool DiariaFinalizada { get; private set; }
+        public Pagamento? Pagamento { get; private set; }
 
         public void AtualizarDiaria(DateTime horaFim, Startup.MinhasConfiguracoes options)
         {
@@ -65,9 +67,27 @@ namespace ExercicioApiEstacionamento.Entidades
             }
 
         }
+
         public void AdicionarVeiculo(Veiculo veiculo)
         {
             Veiculo = veiculo;
+                           
+        }
+
+        public void FinalizarPagamento(Pagamento pagamento)
+        {
+            if (pagamento.Valido)
+            {
+                Pagamento = pagamento;
+
+                this.DataPagamento = DateTime.Now;
+                
+                //efetiva pagamento
+            }
+            else
+            {
+                throw new Exception("Forma de pagamento inválida!!");
+            }
 
         }
 

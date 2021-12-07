@@ -33,6 +33,24 @@ namespace ExercicioApiEstacionamento.Servicos
             return diaria;
 
         }
+        public Diaria FinalizarPagamento(Guid id, Pagamento pagamento)
+        {
+            var diaria = _diarias.SingleOrDefault(u => u.Id == id);
+
+            if (diaria is null)
+                throw new Exception("Diária não encontrada!");
+
+            if (diaria.ValorDiaria != pagamento.Valor) 
+                throw new Exception("Valor do pagamento inválido!");
+
+            if(diaria.DiariaFinalizada ==false)
+                throw new Exception("Diária não finalizada! Favor encerrar.");
+
+            diaria.FinalizarPagamento(pagamento);
+
+            return diaria;
+
+        }
 
         public IEnumerable<Diaria> Get() => _diarias;
     }

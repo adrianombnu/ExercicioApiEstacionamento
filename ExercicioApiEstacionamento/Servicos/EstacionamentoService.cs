@@ -60,8 +60,7 @@ namespace ExercicioApiEstacionamento.Servicos
                 throw new Exception("Estacionamento não encontrado!");
 
             return est.FinalizarDiaria(placa, _settigns);
-            //return est.GerarTicket(placa);
-            //return est;
+            
         }
 
     }

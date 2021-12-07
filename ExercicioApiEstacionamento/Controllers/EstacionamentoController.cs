@@ -1,5 +1,6 @@
 ﻿using ExercicioApiEstacionamento.DTOs;
 using ExercicioApiEstacionamento.Entidades;
+using ExercicioApiEstacionamento.Enumerados;
 using ExercicioApiEstacionamento.Servicos;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -82,6 +83,78 @@ namespace ExercicioApiEstacionamento.Controllers
                 return BadRequest("Erro ao finalizar diária: " + ex.Message);
             }
            
+        }
+
+        [HttpPost, Route("{idDiaria}/pagamento/")]
+        public IActionResult FinalizarPagamento(Guid idDiaria, PagamentoDTO pagamentoDTO)
+        {
+            pagamentoDTO.Validar();
+
+            if (!pagamentoDTO.Valido)
+                return BadRequest("Pagamento inválido!");
+
+            try
+            {
+                switch (pagamentoDTO.FormaPagamento)
+                {
+                    case EFormaPagamento.Boleto:
+                        {
+                            var formaPagamento = new Boleto(DateTime.Now, pagamentoDTO.PagamentoBoleto.Valor);
+
+                            return Created("", _diariaService.FinalizarPagamento(idDiaria, formaPagamento));
+
+                        }
+
+                    case EFormaPagamento.CartaoCredito:
+                        {
+                            var formaPagamento = new CartaoDebito(pagamentoDTO.PagamentoCartaoCredito.NomeDoCartao,
+                                                                  pagamentoDTO.PagamentoCartaoCredito.NumeroCartao,
+                                                                  pagamentoDTO.PagamentoCartaoCredito.CodigoCvc,
+                                                                  pagamentoDTO.PagamentoCartaoCredito.Valor);
+
+                            return Created("", _diariaService.FinalizarPagamento(idDiaria, formaPagamento));
+
+                        }
+
+                    case EFormaPagamento.CartaoDebito:
+                        {
+                            var formaPagamento = new CartaoDebito(pagamentoDTO.PagamentoCartaoDebito.NomeDoCartao,
+                                                                  pagamentoDTO.PagamentoCartaoDebito.NumeroCartao,
+                                                                  pagamentoDTO.PagamentoCartaoDebito.CodigoCvc,
+                                                                  pagamentoDTO.PagamentoCartaoDebito.Valor);
+
+                            return Created("", _diariaService.FinalizarPagamento(idDiaria, formaPagamento));
+
+                        }
+
+                    case EFormaPagamento.Pix:
+                        {
+                            if (pagamentoDTO.PagamentoPix.ChavePix != null)
+                            {
+                                var formaPagamento = new Pix(pagamentoDTO.PagamentoPix.ChavePix, pagamentoDTO.PagamentoPix.Valor);
+
+                                return Created("", _diariaService.FinalizarPagamento(idDiaria, formaPagamento));
+                            }
+                            else
+                            {
+                                var formaPagamento = new Pix(pagamentoDTO.PagamentoPix.CodigoBanco,
+                                                             pagamentoDTO.PagamentoPix.CodigoAgencia,
+                                                             pagamentoDTO.PagamentoPix.NumeroConta,
+                                                             pagamentoDTO.PagamentoPix.Valor);
+
+                                return Created("", _diariaService.FinalizarPagamento(idDiaria, formaPagamento));
+                            }
+
+                        }
+
+                    default:
+                        return BadRequest("Tipo de pagamento inválido!");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Erro ao efetuar o pagamento: " + ex.Message);
+            }
         }
 
         [HttpGet, Route("{id}")]
